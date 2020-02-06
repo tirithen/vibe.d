@@ -449,6 +449,10 @@ struct Bson {
 			const ubyte[16] b = bbd.rawData;
 			return UUID(b);
 		}
+		else static if (is(T == SysTime)) {
+			checkType(Type.date);
+			return BsonDate(fromBsonData!long(m_data)).toSysTime();
+		}
 		else static assert(false, "Cannot cast "~typeof(this).stringof~" to '"~T.stringof~"'.");
 	}
 
