@@ -423,6 +423,11 @@ struct Bson {
 		else static if( is(T == BsonObjectID) ){ checkType(Type.objectID); return BsonObjectID(m_data[0 .. 12]); }
 		else static if( is(T == bool) ){ checkType(Type.bool_); return m_data[0] != 0; }
 		else static if( is(T == BsonDate) ){ checkType(Type.date); return BsonDate(fromBsonData!long(m_data)); }
+		else static if( is(T == SysTime) ){
+			checkType(Type.date);
+			string data = cast(string)m_data[4 .. 4+fromBsonData!int(m_data)-1];
+			return SysTime.fromISOString(data);
+  		}
 		else static if( is(T == BsonRegex) ){
 			checkType(Type.regex);
 			auto d = m_data[0 .. $];
